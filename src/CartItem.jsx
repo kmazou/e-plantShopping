@@ -2,7 +2,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { updateQuantity, removeItem } from '@/CartSlice.jsx';
-
+import './CartItem.css';
 const CartItem = ({ cartItems, onContinueShopping }) => {
   const dispatch = useDispatch();
 

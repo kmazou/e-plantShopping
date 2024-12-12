@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '@/CartSlice.jsx';
-
+import './ProductList.css';
 const ProductList = () => {
   const [addedToCart, setAddedToCart] = useState({});
   const cartItems = useSelector((state) => state.cart.items); // Get cart items from Redux store
