@@ -1,7 +1,7 @@
 // src/components/CartItem.jsx
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { updateQuantity, removeItem } from '../redux/cartSlice';
+import { updateQuantity, removeItem } from '@/CartSlice.jsx';
 
 const CartItem = ({ cartItems, onContinueShopping }) => {
   const dispatch = useDispatch();
