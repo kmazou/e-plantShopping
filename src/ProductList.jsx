@@ -1,53 +1,96 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addItem } from './CartSlice'; // Import addItem from CartSlice
-import './ProductList.css';
+import { addItem, removeItem, updateQuantity } from './CartSlice'; // Import required actions
 
 const ProductList = ({ plantsArray }) => {
-    const [addedToCart, setAddedToCart] = useState({});
-    const dispatch = useDispatch();
-  
-    // Add to Cart Functionality
-    const handleAddToCart = (plant) => {
-      dispatch(addItem(plant)); // Dispatch the plant to the global state
-      setAddedToCart((prevState) => ({
-        ...prevState,
-        [plant.name]: true, // Mark plant as added
-      }));
-    };
-  
-    return (
-      <div className="product-grid">
-        {plantsArray.map((category, index) => (
-          <div key={index}>
-            <h1>{category.category}</h1>
-            <div className="product-list">
-              {category.plants.map((plant, plantIndex) => (
-                <div className="product-card" key={plantIndex}>
-                  <img
-                    className="product-image"
-                    src={plant.image}
-                    alt={plant.name}
-                  />
-                  <div className="product-title">{plant.name}</div>
-                  <div className="product-description">{plant.description}</div>
-                  <div className="product-cost">Cost: ${plant.cost}</div>
+  const [addedToCart, setAddedToCart] = useState({});
+  const dispatch = useDispatch();
+
+  // Add to Cart Functionality
+  const handleAddToCart = (plant) => {
+    dispatch(addItem(plant)); // Dispatch the plant to the global state
+    setAddedToCart((prevState) => ({
+      ...prevState,
+      [plant.name]: true, // Mark plant as added
+    }));
+  };
+
+  // Remove from Cart Functionality
+  const handleRemoveFromCart = (plantName) => {
+    dispatch(removeItem(plantName)); // Dispatch the plant's name to remove it
+    setAddedToCart((prevState) => ({
+      ...prevState,
+      [plantName]: false, // Mark plant as not added
+    }));
+  };
+
+  // Update Quantity Functionality
+  const handleUpdateQuantity = (plantName, newQuantity) => {
+    if (newQuantity > 0) {
+      dispatch(updateQuantity({ name: plantName, quantity: newQuantity })); // Dispatch updated quantity
+    } else {
+      handleRemoveFromCart(plantName); // Remove the item if quantity is set to 0
+    }
+  };
+
+  return (
+    <div className="product-grid">
+      {plantsArray.map((category, index) => (
+        <div key={index}>
+          <h1>{category.category}</h1>
+          <div className="product-list">
+            {category.plants.map((plant, plantIndex) => (
+              <div className="product-card" key={plantIndex}>
+                <img
+                  className="product-image"
+                  src={plant.image}
+                  alt={plant.name}
+                />
+                <div className="product-title">{plant.name}</div>
+                <div className="product-description">{plant.description}</div>
+                <div className="product-cost">Cost: ${plant.cost}</div>
+                {!addedToCart[plant.name] ? (
                   <button
                     className="product-button"
                     onClick={() => handleAddToCart(plant)}
-                    disabled={addedToCart[plant.name]}
                   >
-                    {addedToCart[plant.name] ? 'Added to Cart' : 'Add to Cart'}
+                    Add to Cart
                   </button>
-                </div>
-              ))}
-            </div>
+                ) : (
+                  <div className="cart-controls">
+                    <button
+                      className="remove-button"
+                      onClick={() => handleRemoveFromCart(plant.name)}
+                    >
+                      Remove
+                    </button>
+                    <div className="quantity-controls">
+                      <button
+                        onClick={() =>
+                          handleUpdateQuantity(plant.name, plant.quantity - 1)
+                        }
+                      >
+                        -
+                      </button>
+                      <span>{plant.quantity || 1}</span>
+                      <button
+                        onClick={() =>
+                          handleUpdateQuantity(plant.name, plant.quantity + 1)
+                        }
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-    );
-  };
-  
+        </div>
+      ))}
+    </div>
+  );
+};
 
 function ProductList() {
     const [showCart, setShowCart] = useState(false); 
