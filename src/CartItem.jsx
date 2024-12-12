@@ -1,4 +1,3 @@
-// src/components/CartItem.jsx
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { updateQuantity, removeItem } from '@/CartSlice.jsx';
