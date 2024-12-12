@@ -1,6 +1,7 @@
+// src/components/CartItem.jsx
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { removeItem, updateQuantity } from './CartSlice';
+import { updateQuantity, removeItem } from '../redux/cartSlice';
 
 const CartItem = ({ cartItems, onContinueShopping }) => {
   const dispatch = useDispatch();
@@ -12,9 +13,6 @@ const CartItem = ({ cartItems, onContinueShopping }) => {
       0
     );
   };
-
-  // Calculate subtotal for a specific plant
-  const calculateTotalCost = (item) => item.quantity * item.cost;
 
   // Increment item quantity
   const handleIncrement = (item) => {
@@ -61,7 +59,7 @@ const CartItem = ({ cartItems, onContinueShopping }) => {
                 <span>{item.quantity}</span>
                 <button onClick={() => handleIncrement(item)}>+</button>
               </div>
-              <p>Subtotal: ${calculateTotalCost(item)}</p>
+              <p>Subtotal: ${item.quantity * item.cost}</p>
               <button onClick={() => handleRemove(item)}>Remove</button>
             </div>
           </div>
